@@ -1,0 +1,5 @@
+# textdomain: bike
+Bike Wheel=
+Bike Handles=
+Bike=
+Bike Painter=
