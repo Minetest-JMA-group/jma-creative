@@ -1,0 +1,3 @@
+[submodule "mods/private"]
+	path = mods/private
+	url = git@github.com:markopetrovi/jma-creative-private
