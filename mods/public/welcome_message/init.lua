@@ -42,20 +42,20 @@ minetest.register_on_joinplayer(
 			else
 				local current_time_unix = os.time()
 				
-				sec = current_time_unix - last_login
-				min = math.floor(sec / 60)
+				local sec = current_time_unix - last_login
+				local min = math.floor(sec / 60)
 				sec = sec % 60
 				
-				hour = math.floor(min / 60)
+				local hour = math.floor(min / 60)
 				min = min % 60
 				
-				day = math.floor(hour / 24)
+				local day = math.floor(hour / 24)
 				hour = hour % 24
 				
-				month = math.floor(day / 30)
+				local month = math.floor(day / 30)
 				day = day % 30
 				
-				year = math.floor(month / 12)
+				local year = math.floor(month / 12)
 				month = month % 12
 				
 				local last_login_msg = tostring(sec) .. " " .. checkPlural(sec, "second") .. " ago"
