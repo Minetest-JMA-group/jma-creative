@@ -34,7 +34,7 @@ end
 local get_neighbors_walkable = function(pos)
 	local ret = 0
 	for _,v in ipairs(neighbors_p) do
-		if minetest.registered_nodes[get_nodename_off(pos,v)].walkable then
+		if minetest.registered_nodes[get_nodename_off(pos,v)] and minetest.registered_nodes[get_nodename_off(pos,v)].walkable then
 			ret = ret+1
 		end
 	end
@@ -51,6 +51,9 @@ minetest.register_abm({
 	action = function(pos, node, active_object_count, active_object_count_wider)
 
 		local node1up = get_nodename_off(pos,{y=1})
+		if not minetest.registered_nodes[node1up] then
+			return
+		end
 		if minetest.registered_nodes[node1up].drawtype == "flowingliquid" then
 			if get_neighbors_walkable(pos) < 4 then
 				minetest.remove_node(pos)
@@ -60,7 +63,8 @@ minetest.register_abm({
 					v2=pos_shift(v,{y=1})
 					local node2 = get_nodename_off(pos,v2)
 					if (minetest.get_item_group(node,"crumbly")>0 or
-					minetest.get_item_group(node,"snowy")>0) and not
+					minetest.get_item_group(node,"snowy")>0) and
+					minetest.registered_nodes[node2] and not
 					minetest.registered_nodes[node2].walkable then
 						minetest.remove_node(pos_shift(pos,v))
 					end
@@ -82,12 +86,20 @@ minetest.register_abm({
 		local node2up = minetest.get_node(pos_shift(pos,{y=2}))
 		local node1up = minetest.get_node(pos_shift(pos,{y=1}))
 		
+		if not minetest.registered_nodes[node1up.name] then
+			return
+		end
+		
 		if pos.y % ledgeh ~= 0 then
 			if minetest.registered_nodes[node1up.name].drawtype == "flowingliquid" and
 			get_neighbors_walkable(pos) <= 2 then
 				minetest.remove_node(pos)
 				return
 			end
+		end
+		
+		if not minetest.registered_nodes[node2up.name] then
+			return
 		end
 		
 		if minetest.registered_nodes[node2up.name].drawtype ~= "flowingliquid" and
@@ -97,10 +109,10 @@ minetest.register_abm({
 			
 			for _,v in ipairs(neighbors_p) do
 				node = minetest.get_node(pos_shift(pos,v))
-				if minetest.registered_nodes[node.name].drawtype == "flowingliquid" then
+				if minetest.registered_nodes[node.name] and minetest.registered_nodes[node.name].drawtype == "flowingliquid" then
 					vec = {x=v.x*-1,y=v.y+1,z=v.z*-1}
 					node = minetest.get_node(pos_shift(pos,vec))
-					if minetest.registered_nodes[node.name].walkable then
+					if minetest.registered_nodes[node.name] and minetest.registered_nodes[node.name].walkable then
 						minetest.remove_node(pos)
 						return
 					end
