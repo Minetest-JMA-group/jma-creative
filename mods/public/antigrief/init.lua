@@ -4,38 +4,29 @@ local storage = minetest.get_mod_storage()
 -- Node overrides
 minetest.override_item("default:lava_source", {
 	groups = {lava = 3, liquid = 2, igniter = 1, not_in_creative_inventory = 1},
-	on_place = function(itemstack, placer, pointed_thing)
-		return ItemStack("bucket:bucket_lava")
-	end,
-	after_place_node = function(pos, placer, itemstack, pointed_thing)
-		if minetest.get_node(pos).name == "default:lava_source" then
-			minetest.remove_node(pos)
-		end
-	end
+	on_place = function(_, placer)
+		local wielded_item = placer:get_wielded_item()
+		wielded_item:replace(ItemStack("bucket:bucket_lava"))
+		placer:set_wielded_item(wielded_item)
+    end,
 })
 
 minetest.override_item("default:water_source", {
 	groups = {water = 3, liquid = 3, cools_lava = 1, not_in_creative_inventory = 1},
-	on_place = function(itemstack, placer, pointed_thing)
-		return ItemStack("bucket:bucket_water")
-	end,
-	after_place_node = function(pos, placer, itemstack, pointed_thing)
-		if minetest.get_node(pos).name == "default:water_source" then
-			minetest.remove_node(pos)
-		end
-	end
+	on_place = function(_, placer)
+		local wielded_item = placer:get_wielded_item()
+		wielded_item:replace(ItemStack("bucket:bucket_water"))
+		placer:set_wielded_item(wielded_item)
+    end,
 })
 
 minetest.override_item("default:river_water_source", {
 	groups = {water = 3, liquid = 3, cools_lava = 1, not_in_creative_inventory = 1},
-	on_place = function(itemstack, placer, pointed_thing)
-		return ItemStack("bucket:bucket_river_water")
-	end,
-	after_place_node = function(pos, placer, itemstack, pointed_thing)
-		if minetest.get_node(pos).name == "default:river_water_source" then
-			minetest.remove_node(pos)
-		end
-	end
+	on_place = function(_, placer)
+		local wielded_item = placer:get_wielded_item()
+		wielded_item:replace(ItemStack("bucket:bucket_river_water"))
+		placer:set_wielded_item(wielded_item)
+    end,
 })
 
 -- Timed restrictions
