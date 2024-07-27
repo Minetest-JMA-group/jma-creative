@@ -1,6 +1,11 @@
 antigrief = {}
 local storage = minetest.get_mod_storage()
 
+minetest.register_privilege("no_timed_restrictions", {
+	description = "The privilage bypasses item restrictions for immediate use",
+	give_to_admin = true,
+})
+
 -- Node overrides
 minetest.override_item("default:lava_source", {
 	groups = {lava = 3, liquid = 2, igniter = 1, not_in_creative_inventory = 1},
@@ -32,7 +37,7 @@ minetest.override_item("default:river_water_source", {
 -- Timed restrictions
 function antigrief.is_playtime_passed(player_name, time)
 	local total_playtime = playtime.get_total_playtime(player_name)
-	if total_playtime < time and storage:get_int("whitelist:" .. player_name) == 0 then
+	if total_playtime < time and storage:get_int("whitelist:" .. player_name) == 0 and not minetest.check_player_privs(player_name, "no_timed_restrictions") then
 		minetest.chat_send_player(player_name, "You must play for " ..  playtime.seconds_to_clock(math.abs(total_playtime - time)) .. " to use this item.")
 		return false
 	end
