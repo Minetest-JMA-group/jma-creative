@@ -1,3 +1,9 @@
 [submodule "mods/private"]
 	path = mods/private
 	url = git@github.com:markopetrovi/jma-creative-private
+[submodule "mods/shared"]
+	path = mods/shared
+	url = https://github.com/markopetrovi/jma-shared.git
+[submodule "mods/shared_private"]
+	path = mods/shared_private
+	url = git@github.com:markopetrovi/jma-shared-private.git
