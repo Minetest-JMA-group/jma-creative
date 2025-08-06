@@ -1,0 +1,84 @@
+
+Note: This code has been adjusted to newer (5.x) versions of Minetest
+      by me (Sokomine). These changes where necessary because the old
+      version of 3dforniture would crash newer games.
+
+Changes:
+      * moved the mod up one level in the file system hierarchy for
+        easier installation
+      * removed HTML crafting guide (no longer necessary)
+      * removed changes to papyrus and trees (such things ought to be done in
+        a seperate mod if desired)
+      * adjusted code so that it no longer crashes in new versions:
+        right-click toilet and table lamp in order to use them (also
+        more consisent with recent changes)
+      * tiny code optimizations
+      * nodes that cannot be crafted (open toilet, lamps in diffrent
+        stages) no longer appear in the creative inventory
+
+Sokomine, 28.09.2019
+
+
+ README
+
+========================================================================
+ 3D forniture
+========================================================================
+ 
+ Copyright 2012 Tonyka
+  
+  This program is free software; you can redistribute it and/or modify
+  it under the terms of the GNU General Public License as published by
+  the Free Software Foundation; either version 2 of the License, or
+  (at your option) any later version.
+  
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
+  
+  You should have received a copy of the GNU General Public License
+  along with this program; if not, write to the Free Software
+  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
+  MA 02110-1301, USA.
+
+------------------------------------------------------------------------
+
+3D Forniture is a modification programmed in lua for the game MineTest.
+Has been made ​​non-profit.
+
+The mod is based on Node drawtype - "nodebox"
+The "nodebox" is still experimental, and may be incompatibly, and
+changed in the future.
+
+To use this modification is necessary to install Mine Test  0.4 or later
+
+------------------------------------------------------------------------
+
+============
+Minetest-c55
+============
+
+An InfiniMiner/Minecraft inspired game.
+
+Copyright (c) 2010-2012 Perttu Ahola <celeron55@gmail.com>
+
+repository:
+https://github.com/celeron55/minetest
+
+------------------------------------------------------------------------
+
+I want to thank your support and effort, people who have helped by
+providing information, ideas and code:
+
+    Lesliev
+
+        code & information and assistance in multiples aspects
+
+    InfinityProject
+
+        suggested creating bathroom kit.
+
+    cosarara97
+
+        code.
