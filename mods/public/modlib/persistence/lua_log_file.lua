@@ -177,9 +177,14 @@ function _write(self)
 end
 
 function _rewrite(self)
-	self.file = io.open(self.file_path, "w+")
+	local content = {}
+	-- Dump to a buffer instead of the file, so the rewritten log is
+	-- written to disk atomically by safe_file_write (a truncated log
+	-- would be unrecoverable, as it is a Lua chunk at load time)
+	self.file = {write = function(_, str) content[#content + 1] = str end}
 	self:_write()
-	self.file:close()
+	self.file = nil
+	minetest.safe_file_write(self.file_path, table.concat(content))
 end
 
 function rewrite(self)

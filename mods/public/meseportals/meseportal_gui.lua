@@ -7,11 +7,7 @@ local reportFormspecViolation = function(submitter_name, violation)
 		file:close()
 	end
 	data = data.."<"..os.date().."> "..submitter_name.." "..violation.."\n"
-	file = io.open( path, "w" )
-	if( file ) then
-		file:write( data )
-		file:close()
-	end
+	minetest.safe_file_write( path, data )
 end
 local getCleanText = function(submitter_name, scan_text)
 	if scan_text ~= nil then

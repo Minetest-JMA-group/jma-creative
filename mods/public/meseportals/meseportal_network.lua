@@ -6,36 +6,45 @@ end
 meseportals.save_data = function(table_pointer)
 	local data = minetest.serialize( meseportals_network[table_pointer] )
 	local path = minetest.get_worldpath().."/meseportals_"..table_pointer..".data"
-	local file = io.open( path, "w" )
-	if( file ) then
-		file:write( data )
-		file:close()
+	if( minetest.safe_file_write( path, data ) ) then
 		return true
 	else return nil
 	end
 end
 
 meseportals.restore_data = function(table_pointer)
-	
+
 	local path = minetest.get_worldpath().."/meseportals_"..table_pointer..".data"
 	local file = io.open( path, "r" )
 	if( file ) then
 		local data = file:read("*all")
-		meseportals_network[table_pointer] = minetest.deserialize( data )
 		file:close()
+		local restored = minetest.deserialize( data )
+		if type( restored ) == "table" then
+			meseportals_network[table_pointer] = restored
+		else
+			minetest.log("error", "[meseportals] Failed to deserialize "..path.." (file may be corrupt); starting with empty data")
+			meseportals_network[table_pointer] = {}
+		end
 		if table_empty(meseportals_network[table_pointer]) then os.remove(path) end
 	return true
 	else return nil
 	end
 end
 
-meseportals.load_players = function() 
+meseportals.load_players = function()
 	local path = minetest.get_worldpath().."/meseportals.players"
 	local file = io.open( path, "r" )
 	if( file ) then
 		local data = file:read("*all")
-		meseportals["registered_players"] = minetest.deserialize( data )
 		file:close()
+		local loaded = minetest.deserialize( data )
+		if type( loaded ) == "table" then
+			meseportals["registered_players"] = loaded
+		else
+			minetest.log("error", "[meseportals] Failed to deserialize "..path.." (file may be corrupt); starting with empty data")
+			meseportals["registered_players"] = {}
+		end
 		if table_empty(meseportals["registered_players"]) then os.remove(path) end
 	return true
 	else return nil
@@ -46,10 +55,7 @@ meseportals.save_players = function()
 	if table_empty(meseportals["registered_players"]) then return end
 	local data = minetest.serialize( meseportals["registered_players"] )
 	local path = minetest.get_worldpath().."/meseportals.players"
-	local file = io.open( path, "w" )
-	if( file ) then
-		file:write( data )
-		file:close()
+	if( minetest.safe_file_write( path, data ) ) then
 		return true
 	else return nil
 	end

@@ -72,7 +72,13 @@ local function fetch_url(url, callback)
 	end)
 end
 
--- Insecure workaround since meta/ and textures/ cannot be written to
+-- Insecure workaround: the skins are saved into this mod's own directory
+-- (modpath/meta, modpath/textures). `core.safe_file_write` cannot be used
+-- here: those paths are inside the git-managed game, which is mounted
+-- read-only on this server, so no direct write -- secure or insecure --
+-- can persist them. The insecure io.open is kept to mirror upstream
+-- skinsdb; on this deployment these writes fail and the updater cannot
+-- save skins (files would need to be written outside the game directory).
 local function unsafe_file_write(path, contents)
 	local f = ie.io.open(path, "wb")
 	f:write(contents)
@@ -89,7 +95,8 @@ local function safe_single_skin(skin)
 
 	local name =  "character" .. skins.fsep .. skin.id
 
-	-- core.safe_file_write does not work here
+	-- core.safe_file_write does not work here: modpath is inside the
+	-- git-managed game directory, mounted read-only (see unsafe_file_write)
 	unsafe_file_write(
 		meta_path .. name .. ".txt",
 		table.concat(meta, "\n")
