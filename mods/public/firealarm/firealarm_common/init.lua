@@ -27,7 +27,7 @@ function firealarm.loadDevLists()
 		if not data.annunciator then data.annunciator = {} end
 		firealarm.devices = data
 	else
-		error("Fire alarm devices table is corrupted or contains invalid data")
+		core.log("error", "Fire alarm devices table is corrupted or contains invalid data")
 	end
 end
 
