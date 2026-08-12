@@ -1,0 +1,3 @@
+# Fire Alarm Common settings
+
+firealarm.orphan_policy (How to handle fire alarm devices missing from the database) enum decommission remove off

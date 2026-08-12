@@ -624,7 +624,10 @@ minetest.register_node(":firealarm:panel_alarm_supervisory_trouble",{
 function firealarm.panelABM(pos)
 		local node = minetest.get_node(pos)
 		local devInfo = firealarm.getDevInfo("panel",pos)
-		if not devInfo then return end
+		if not devInfo then
+			firealarm.markDecommissioned(pos)
+			return
+		end
 		if not devInfo.associatedAnnunciators then devInfo.associatedAnnunciators = {} end
 		local hornsActive = #devInfo.alarm > 0 and not devInfo.silenced
 		local strobesActive = #devInfo.alarm > 0
@@ -634,9 +637,15 @@ function firealarm.panelABM(pos)
    		        if not dev then
         			trouble(pos, devPos)
     			else
-       			        dev.hornActive = hornsActive
-       			        dev.strobeActive = strobesActive
-        			firealarm.setDevInfo("notification", devPos, dev)
+       			        local devNode = minetest.get_node(devPos)
+       			        if devNode.name ~= "ignore" and devNode.name:sub(1, 10) ~= "firealarm:" then
+       			        	-- The device node is gone; drop the stale entry.
+       			        	firealarm.setDevInfo("notification", devPos, nil)
+       			        else
+       			        	dev.hornActive = hornsActive
+       			        	dev.strobeActive = strobesActive
+       			        	firealarm.setDevInfo("notification", devPos, dev)
+       			        end
     			end
 		end
 		for i,v in pairs(devInfo.associatedSignalingDevices) do
@@ -644,7 +653,11 @@ function firealarm.panelABM(pos)
 			if not dev then
 				trouble(pos,minetest.get_position_from_hash(i))
 			else
-				if dev.active then
+				local devNode = minetest.get_node(minetest.get_position_from_hash(i))
+				if devNode.name ~= "ignore" and devNode.name:sub(1, 10) ~= "firealarm:" then
+					-- The device node is gone; drop the stale entry.
+					firealarm.setDevInfo("signaling", minetest.get_position_from_hash(i), nil)
+				elseif dev.active then
 					if v.action == "Alarm" then
 						alarm(pos,minetest.get_position_from_hash(i))
 					elseif v.action == "Supervisory" then
@@ -659,6 +672,12 @@ function firealarm.panelABM(pos)
 			local dev = firealarm.getDevInfo("annunciator",minetest.get_position_from_hash(i))
 			if not dev then
 				trouble(pos,minetest.get_position_from_hash(i))
+			else
+				local devNode = minetest.get_node(minetest.get_position_from_hash(i))
+				if devNode.name ~= "ignore" and devNode.name:sub(1, 10) ~= "firealarm:" then
+					-- The device node is gone; drop the stale entry.
+					firealarm.setDevInfo("annunciator", minetest.get_position_from_hash(i), nil)
+				end
 			end
 		end
                 if devInfo.associatedSprinklerPanels then
