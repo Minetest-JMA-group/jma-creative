@@ -71,7 +71,7 @@ local function setFormspec(pos)
 					table.insert(devInfo.removeMenuDevList,dev)
 					fs = fs..minetest.formspec_escape(v.name)..","
 				end
-                                for k,v in pairs(devInfo.associatedSprinklerPanels or {}) do
+				for k,v in pairs(devInfo.associatedSprinklerPanels or {}) do
 					local dev = {type = "sprinkler_panel", hash = k}
 					table.insert(devInfo.removeMenuDevList, dev)
 					fs = fs .. minetest.formspec_escape(v.name) .. ","
@@ -98,9 +98,9 @@ local function alarm(pos,initiator)
 	elseif posHash == initiatorHash then
 		name = "Panel Drill Switch"
 	end
-        if devInfo.associatedSprinklerPanels and devInfo.associatedSprinklerPanels[initiatorHash] then
-                name = devInfo.associatedSprinklerPanels[initiatorHash].name
-        end
+	if devInfo.associatedSprinklerPanels and devInfo.associatedSprinklerPanels[initiatorHash] then
+		name = devInfo.associatedSprinklerPanels[initiatorHash].name
+	end
 	table.insert(devInfo.alarm,{initiator = initiatorHash,name = name})
 	devInfo.acked = false
 	devInfo.silenced = false
@@ -118,9 +118,9 @@ local function supervisory(pos,initiator)
 	if devInfo.associatedSignalingDevices[initiatorHash] then
 		name = devInfo.associatedSignalingDevices[initiatorHash].name
 	end
-        if devInfo.associatedSprinklerPanels and devInfo.associatedSprinklerPanels[initiatorHash] then
-                name = devInfo.associatedSprinklerPanels[initiatorHash].name
-        end
+	if devInfo.associatedSprinklerPanels and devInfo.associatedSprinklerPanels[initiatorHash] then
+		name = devInfo.associatedSprinklerPanels[initiatorHash].name
+	end
 	table.insert(devInfo.supervisory,{initiator = initiatorHash,name = name})
 	devInfo.acked = false
 	firealarm.setDevInfo("panel",pos,devInfo)
@@ -143,9 +143,9 @@ local function trouble(pos,initiator)
 	if devInfo.associatedAnnunciators[initiatorHash] then
 		name = devInfo.associatedAnnunciators[initiatorHash].name
 	end
-        if devInfo.associatedSprinklerPanels and devInfo.associatedSprinklerPanels[initiatorHash] then
-                name = devInfo.associatedSprinklerPanels[initiatorHash].name
-        end
+	if devInfo.associatedSprinklerPanels and devInfo.associatedSprinklerPanels[initiatorHash] then
+		name = devInfo.associatedSprinklerPanels[initiatorHash].name
+	end
 	table.insert(devInfo.trouble,{initiator = initiatorHash,name = name})
 	devInfo.acked = false
 	firealarm.setDevInfo("panel",pos,devInfo)
@@ -180,7 +180,7 @@ local function handleFields(pos,_,fields,sender)
 					trouble(pos,minetest.get_position_from_hash(i))
 				elseif not dev.manualReset then
 					dev.active = false
-                                        firealarm.setDevInfo(
+					firealarm.setDevInfo(
 						"signaling",
 						minetest.get_position_from_hash(i),
 						dev
@@ -237,19 +237,19 @@ local function handleFields(pos,_,fields,sender)
 								end
 								devInfo.associatedAnnunciators[minetest.hash_node_position(targetPos)] = devParams
 							end
-				        	else
-	                                                targetInfo = sprinkler.getDevInfo("panel", targetPos)
+						else
+							targetInfo = sprinkler.getDevInfo("panel", targetPos)
 
-                                                        if targetInfo then
-                                                                targetInfo.facp = minetest.hash_node_position(pos)
-                                                                sprinkler.setDevInfo("panel", targetPos, targetInfo)
-                                                                if not devInfo.associatedSprinklerPanels then
-                                                                        devInfo.associatedSprinklerPanels = {}
-                                                                end
-                                                                devInfo.associatedSprinklerPanels[minetest.hash_node_position(targetPos)] = { name = fields.name }
-						        else
-						        	minetest.chat_send_player(name,"Not a valid fire alarm device")
-                                                        end
+							if targetInfo then
+								targetInfo.facp = minetest.hash_node_position(pos)
+								sprinkler.setDevInfo("panel", targetPos, targetInfo)
+								if not devInfo.associatedSprinklerPanels then
+									devInfo.associatedSprinklerPanels = {}
+								end
+								devInfo.associatedSprinklerPanels[minetest.hash_node_position(targetPos)] = { name = fields.name }
+							else
+								minetest.chat_send_player(name,"Not a valid fire alarm device")
+							end
 						end
 					end
 				end
@@ -290,14 +290,14 @@ local function handleFields(pos,_,fields,sender)
 						targetInfo.associated = nil
 						firealarm.setDevInfo("annunciator",targetPos,targetInfo)
 					end
-                                elseif dev.type == "sprinkler_panel" then
-    					devInfo.associatedSprinklerPanels[dev.hash] = nil
-    					local targetPos = minetest.get_position_from_hash(dev.hash)
-    					local targetInfo = sprinkler.getDevInfo("panel", targetPos)
-    					if targetInfo then
-     				                targetInfo.facp = nil
-    					        sprinkler.setDevInfo("panel", targetPos, targetInfo)
-    					end
+				elseif dev.type == "sprinkler_panel" then
+					devInfo.associatedSprinklerPanels[dev.hash] = nil
+					local targetPos = minetest.get_position_from_hash(dev.hash)
+					local targetInfo = sprinkler.getDevInfo("panel", targetPos)
+					if targetInfo then
+						targetInfo.facp = nil
+						sprinkler.setDevInfo("panel", targetPos, targetInfo)
+					end
 				end
 			end
 		end
@@ -332,7 +332,7 @@ minetest.register_node(":firealarm:panel",{
 			associatedSignalingDevices = {},
 			associatedNotificationDevices = {},
 			associatedAnnunciators = {},
-                        associatedSprinklerPanels = {},
+			associatedSprinklerPanels = {},
 			removeMenuDevList = {},
 			alarm = {},
 			supervisory = {},
@@ -361,9 +361,9 @@ minetest.register_node(":firealarm:panel_alarm",{
 		"firealarm_panel_sides.png",
 		{
 			name = "[combine:64x128"..
-			       ":0,0=firealarm_panel_front_normal.png"..
-			       ":0,64=firealarm_panel_front_normal.png"..
-			       ":0,64=firealarm_panel_led_alarm.png",
+			":0,0=firealarm_panel_front_normal.png"..
+			":0,64=firealarm_panel_front_normal.png"..
+			":0,64=firealarm_panel_led_alarm.png",
 			animation = {
 				type = "vertical_frames",
 				aspect_w = 64,
@@ -400,9 +400,9 @@ minetest.register_node(":firealarm:panel_supervisory",{
 		"firealarm_panel_sides.png",
 		{
 			name = "[combine:64x128"..
-			       ":0,0=firealarm_panel_front_normal.png"..
-			       ":0,64=firealarm_panel_front_normal.png"..
-			       ":0,64=firealarm_panel_led_supervisory.png",
+			":0,0=firealarm_panel_front_normal.png"..
+			":0,64=firealarm_panel_front_normal.png"..
+			":0,64=firealarm_panel_led_supervisory.png",
 			animation = {
 				type = "vertical_frames",
 				aspect_w = 64,
@@ -438,9 +438,9 @@ minetest.register_node(":firealarm:panel_trouble",{
 		"firealarm_panel_sides.png",
 		{
 			name = "[combine:64x128"..
-			       ":0,0=firealarm_panel_front_normal.png"..
-			       ":0,64=firealarm_panel_front_normal.png"..
-			       ":0,64=firealarm_panel_led_trouble.png",
+			":0,0=firealarm_panel_front_normal.png"..
+			":0,64=firealarm_panel_front_normal.png"..
+			":0,64=firealarm_panel_led_trouble.png",
 			animation = {
 				type = "vertical_frames",
 				aspect_w = 64,
@@ -476,10 +476,10 @@ minetest.register_node(":firealarm:panel_alarm_trouble",{
 		"firealarm_panel_sides.png",
 		{
 			name = "[combine:64x128"..
-			       ":0,0=firealarm_panel_front_normal.png"..
-			       ":0,64=firealarm_panel_front_normal.png"..
-			       ":0,64=firealarm_panel_led_alarm.png"..
-			       ":0,64=firealarm_panel_led_trouble.png",
+			":0,0=firealarm_panel_front_normal.png"..
+			":0,64=firealarm_panel_front_normal.png"..
+			":0,64=firealarm_panel_led_alarm.png"..
+			":0,64=firealarm_panel_led_trouble.png",
 			animation = {
 				type = "vertical_frames",
 				aspect_w = 64,
@@ -515,10 +515,10 @@ minetest.register_node(":firealarm:panel_alarm_supervisory",{
 		"firealarm_panel_sides.png",
 		{
 			name = "[combine:64x128"..
-			       ":0,0=firealarm_panel_front_normal.png"..
-			       ":0,64=firealarm_panel_front_normal.png"..
-			       ":0,64=firealarm_panel_led_alarm.png"..
-			       ":0,64=firealarm_panel_led_supervisory.png",
+			":0,0=firealarm_panel_front_normal.png"..
+			":0,64=firealarm_panel_front_normal.png"..
+			":0,64=firealarm_panel_led_alarm.png"..
+			":0,64=firealarm_panel_led_supervisory.png",
 			animation = {
 				type = "vertical_frames",
 				aspect_w = 64,
@@ -554,10 +554,10 @@ minetest.register_node(":firealarm:panel_supervisory_trouble",{
 		"firealarm_panel_sides.png",
 		{
 			name = "[combine:64x128"..
-			       ":0,0=firealarm_panel_front_normal.png"..
-			       ":0,64=firealarm_panel_front_normal.png"..
-			       ":0,64=firealarm_panel_led_supervisory.png"..
-			       ":0,64=firealarm_panel_led_trouble.png",
+			":0,0=firealarm_panel_front_normal.png"..
+			":0,64=firealarm_panel_front_normal.png"..
+			":0,64=firealarm_panel_led_supervisory.png"..
+			":0,64=firealarm_panel_led_trouble.png",
 			animation = {
 				type = "vertical_frames",
 				aspect_w = 64,
@@ -593,11 +593,11 @@ minetest.register_node(":firealarm:panel_alarm_supervisory_trouble",{
 		"firealarm_panel_sides.png",
 		{
 			name = "[combine:64x128"..
-			       ":0,0=firealarm_panel_front_normal.png"..
-			       ":0,64=firealarm_panel_front_normal.png"..
-			       ":0,64=firealarm_panel_led_alarm.png"..
-			       ":0,64=firealarm_panel_led_supervisory.png"..
-			       ":0,64=firealarm_panel_led_trouble.png",
+			":0,0=firealarm_panel_front_normal.png"..
+			":0,64=firealarm_panel_front_normal.png"..
+			":0,64=firealarm_panel_led_alarm.png"..
+			":0,64=firealarm_panel_led_supervisory.png"..
+			":0,64=firealarm_panel_led_trouble.png",
 			animation = {
 				type = "vertical_frames",
 				aspect_w = 64,
@@ -632,21 +632,21 @@ function firealarm.panelABM(pos)
 		local hornsActive = #devInfo.alarm > 0 and not devInfo.silenced
 		local strobesActive = #devInfo.alarm > 0
 		for i in pairs(devInfo.associatedNotificationDevices) do
-    			local devPos = minetest.get_position_from_hash(i)
-    			local dev = firealarm.getDevInfo("notification", devPos)
-   		        if not dev then
-        			trouble(pos, devPos)
-    			else
-       			        local devNode = minetest.get_node(devPos)
-       			        if devNode.name ~= "ignore" and devNode.name:sub(1, 10) ~= "firealarm:" then
-       			        	-- The device node is gone; drop the stale entry.
-       			        	firealarm.setDevInfo("notification", devPos, nil)
-       			        else
-       			        	dev.hornActive = hornsActive
-       			        	dev.strobeActive = strobesActive
-       			        	firealarm.setDevInfo("notification", devPos, dev)
-       			        end
-    			end
+			local devPos = minetest.get_position_from_hash(i)
+			local dev = firealarm.getDevInfo("notification", devPos)
+			if not dev then
+				trouble(pos, devPos)
+			else
+				local devNode = minetest.get_node(devPos)
+				if devNode.name ~= "ignore" and devNode.name:sub(1, 10) ~= "firealarm:" then
+					-- The device node is gone; drop the stale entry.
+					firealarm.setDevInfo("notification", devPos, nil)
+				else
+					dev.hornActive = hornsActive
+					dev.strobeActive = strobesActive
+					firealarm.setDevInfo("notification", devPos, dev)
+				end
+			end
 		end
 		for i,v in pairs(devInfo.associatedSignalingDevices) do
 			local dev = firealarm.getDevInfo("signaling",minetest.get_position_from_hash(i))
@@ -680,7 +680,7 @@ function firealarm.panelABM(pos)
 				end
 			end
 		end
-                if devInfo.associatedSprinklerPanels then
+		if devInfo.associatedSprinklerPanels then
 			for i in pairs(devInfo.associatedSprinklerPanels) do
 				local sp = sprinkler.getDevInfo(
 					"panel",

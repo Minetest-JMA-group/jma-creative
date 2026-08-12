@@ -27,7 +27,7 @@ function firealarm.loadDevLists()
 	local file = io.open(path,"r")
 	if not file then
 		minetest.log("warning","Unable to open fire alarm devices table for reading. "..
-		                     "This is normal on the first start.")
+				"This is normal on the first start.")
 		firealarm.saveDevLists()
 		return
 	end
@@ -37,7 +37,7 @@ function firealarm.loadDevLists()
 	if type(data) == "table" then
 		if not data.annunciator then data.annunciator = {} end
 		if type(data.panel) == "table" and type(data.signaling) == "table" and
-		   type(data.notification) == "table" then
+		type(data.notification) == "table" then
 			firealarm.devices = data
 		else
 			firealarm.disable(path)
@@ -113,7 +113,7 @@ function sprinkler.loadDevLists()
 	local file = io.open(path,"r")
 	if not file then
 		minetest.log("warning","Unable to open sprinkler devices table for reading. "..
-		                     "This is normal on the first start.")
+				"This is normal on the first start.")
 		sprinkler.saveDevLists()
 		return
 	end
@@ -123,7 +123,7 @@ function sprinkler.loadDevLists()
 	if type(data) == "table" then
 		if not data.annunciator then data.annunciator = {} end
 		if type(data.panel) == "table" and type(data.signaling) == "table" and
-		   type(data.notification) == "table" then
+		type(data.notification) == "table" then
 			sprinkler.devices = data
 		else
 			sprinkler.disable(path)
