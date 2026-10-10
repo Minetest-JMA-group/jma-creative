@@ -1,6 +1,12 @@
+[submodule "mods/private"]
+	path = mods/private
+	ignore = all
 [submodule "mods/shared"]
 	path = mods/shared
 	url = https://codeberg.org/Luanti-JMA-group/jma-shared
+[submodule "mods/shared_private"]
+	path = mods/shared_private
+	ignore = all
 [submodule "mods/jma_mtgame"]
 	path = mods/jma_mtgame
 	url = https://codeberg.org/Luanti-JMA-group/jma-mtgame
