@@ -20,3 +20,9 @@
 .metadata
 # Idea IDE
 .idea/*
+
+# Private submodules
+# Keep a single file tracked inside and ignore the rest
+# The server will bind-mount the actual module here
+mods/private/
+mods/shared_private/
